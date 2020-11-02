@@ -1,0 +1,20 @@
+.main {
+	background: #000000 url('../assets/bg.png');
+	background-size: cover;
+	height: 100vh;
+	color: white;
+	display: flex;
+}
+
+.main__item {
+	background: rgba(98, 187, 216, 0.5);
+	width: 20%;
+	height: 20%;
+	margin: 20px;
+	padding: 10px;
+	transition: 0.2s all;
+}
+
+.main__item--selected {
+	background: lightcoral;
+}

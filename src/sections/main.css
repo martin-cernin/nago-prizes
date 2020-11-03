@@ -8,11 +8,15 @@
 
 .main__item {
 	background: rgba(98, 187, 216, 0.5);
-	width: 20%;
-	height: 20%;
+	width: 300px;
+	height: 200px;
 	margin: 20px;
 	padding: 10px;
 	transition: 0.2s all;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 .main__item--selected {

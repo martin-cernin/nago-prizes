@@ -1,20 +1,22 @@
 import React from 'react'
 import './main.css'
+import {TPrize} from 'types/TPrize'
 
 type TProps = {
-    prizes: string[],
-    setPrizes: (prizes: string[]) => void,
+    prizes: TPrize[],
+    setPrizes: (prizes: TPrize[]) => void,
 }
 
-const Item = (prize: string, index: number) => {
+const Item = (prize: TPrize, index: number) => {
     const [isSelected, setIsSelected] = React.useState(false)
     return (
         <div
             onClick={() => setIsSelected(!isSelected)}
             className={`main__item${isSelected ? ' main__item--selected' : ''}`}
-            key={`${prize}_${index}`}
+            key={`${prize.name}_${index}`}
         >
-            {prize}
+            <b>{prize.name}</b>
+            {prize.image && <img src={prize.image} width={200} height={120} />}
         </div>
     )
 }

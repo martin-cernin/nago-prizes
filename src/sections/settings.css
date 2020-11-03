@@ -36,8 +36,35 @@
 	align-items: center;
 }
 
+.button--small {
+	width: 140px;
+	height: 30px;
+	margin: 2.5px 0;
+}
+
+.button--danger {
+	background: red;
+}
+.button--danger:hover {
+	color: white;
+	background: darkred;
+}
+
 .button--disabled {
 	background: darkgray !important;
 	cursor: not-allowed;
 	opacity: 0.3;
+}
+
+.settings__prizes-wrapper {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.settings__prize-item {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 260px;
 }

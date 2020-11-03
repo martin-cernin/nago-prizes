@@ -6,9 +6,10 @@ type TProps = {
 	onChange: (value: string | number) => void,
 	label: string,
 	onSubmit?: () => void,
+	isSubmitDisabled?: boolean,
 }
 
-const Input: React.FC<TProps> = ({value, onChange, label, onSubmit}) => {
+const Input: React.FC<TProps> = ({value, onChange, label, onSubmit, isSubmitDisabled = false}) => {
     return (
         <div className={'input'}>
            <div className={'input__label'}>{label}</div>
@@ -22,6 +23,7 @@ const Input: React.FC<TProps> = ({value, onChange, label, onSubmit}) => {
 		       	    <button
 			            onClick={onSubmit}
 			            className={'input__button'}
+			            disabled={isSubmitDisabled}
 		            >
 			            ODESLAT
 		            </button>

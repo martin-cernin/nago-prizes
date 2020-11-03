@@ -1,47 +1,35 @@
 import Input from 'components/Input'
 import React from 'react'
 import './settings.css'
+import {TPrize} from 'types/TPrize'
+import {apiPostImage} from 'util/images'
 
 type TProps = {
-    prizes: string[],
-    setPrizes: (prizes: string[]) => void,
+    prizes: TPrize[],
+    setPrizes: (prizes: TPrize[]) => void,
 }
 
-const Settings: React.FC<TProps> = (props) => {
-    const [columnCount, setColumnCount] = React.useState(4)
-    const [customBackground, setCustomBackground] = React.useState('')
+async function handleImageUpload (image: File, prize: TPrize, prizeIndex: number, prizes: TPrize[], setPrizes: (prizes: TPrize[]) => void) {
+    const imageUrl = await apiPostImage(image)
+    const newPrizes = prizes.map((item, index) => {
+        if (index === prizeIndex) {
+            return {
+                ...prize,
+                image: imageUrl,
+            }
+        }
+        return item
+    })
+    setPrizes(newPrizes)
+}
+
+const Settings: React.FC<TProps> = ({prizes, setPrizes}) => {
     const [shouldUseNames, setShouldUseNames] = React.useState(true)
     const [prizeName, setPrizeName] = React.useState('')
-    const {prizes, setPrizes} = props
 
     return (
         <div className={'settings'}>
             <div style={{width: '25%', borderRight: '1px solid lightgray'}}>
-                <div>
-                    <Input
-                        value={prizeName}
-                        onChange={(value) => setPrizeName(String(value))}
-                        label={'Přidat odměnu'}
-                        onSubmit={() => {
-                            setPrizes([...prizes, prizeName])
-                            setPrizeName('')
-                        }}
-                    />
-                </div>
-                <div>
-                    <Input
-                        value={columnCount}
-                        onChange={(value) => setColumnCount(Number(value))}
-                        label={'Počet sloupců'}
-                    />
-                </div>
-                <div>
-                    <Input
-                        value={customBackground}
-                        onChange={(value) => setCustomBackground(String(value))}
-                        label={'Custom pozadí'}
-                    />
-                </div>
                 <div className={'settings__buttons'}>
                     <div
                         className={'button button--names'}
@@ -50,25 +38,64 @@ const Settings: React.FC<TProps> = (props) => {
                             background: shouldUseNames ? 'lightgreen' : 'red'
                         }}
                     >
-                        VYŽADOVAT JMÉNA
+                        ZAPISOVAT JMÉNA
                     </div>
                     <button
                         className={'button button--clear'}
                     >
-                        PROMAZAT
+                        PROMAZAT VŠE
                     </button>
-                    <button className={'button button--import button--disabled'}>IMPORT</button>
-                    <button className={'button button--export button--disabled'}>EXPORT</button>
+                </div>
+                <div>
+                    <Input
+                        value={prizeName}
+                        onChange={(value) => setPrizeName(String(value))}
+                        label={'Přidat odměnu'}
+                        onSubmit={() => {
+                            setPrizes([...prizes, {name: prizeName, image: '', count: 1}])
+                            setPrizeName('')
+                        }}
+                        isSubmitDisabled={prizeName.length < 1}
+                    />
                 </div>
             </div>
 
             <div style={{width: '75%'}}>
                 <div>
                     <div>Seznam odměn</div>
-                    <div>
+                    <div className={'settings__prizes-wrapper'}>
                         {prizes.length ? prizes.map((item, index) => (
-                            <div key={`${item}_${index}`}>
-                                {item}
+                            <div
+                                key={`${item.name}_${index}`}
+                                className={'settings__prize-item'}
+                            >
+                                <b>{item.name}</b>
+                                {item.image ? (
+                                    <img src={item.image} width={200} height={120} />
+                                ) : (
+                                    <input
+                                        type='file'
+                                        onChange={(ev) => ev.target.files && handleImageUpload(ev.target.files[0], item, index, prizes, setPrizes)}
+                                    />
+                                )}
+                                <button
+                                    className={'button button--small button--names'}
+                                    onClick={() => {
+                                        setPrizes([...prizes, item])
+                                    }}
+                                >
+                                    DUPLIKOVAT
+                                </button>
+                                <button
+                                    className={'button button--small button--danger'}
+                                    onClick={() => {
+                                        setPrizes(
+                                            prizes.filter((item, itemIndex) => itemIndex !== index)
+                                        )
+                                    }}
+                                >
+                                    SMAZAT
+                                </button>
                             </div>
                         )) : '...'}
                     </div>

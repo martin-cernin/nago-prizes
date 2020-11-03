@@ -1,6 +1,7 @@
 import React from 'react'
 import Main from 'sections/main'
 import Settings from 'sections/settings'
+import {TPrize} from 'types/TPrize'
 
 function handleWheelEvent (setIsSettings: (isSettings: boolean) => void) {
 	document.addEventListener('wheel', (event) => {
@@ -15,9 +16,8 @@ function handleWheelEvent (setIsSettings: (isSettings: boolean) => void) {
 }
 
 function App() {
-	const [isSettings, setIsSettings] = React.useState(false)
-	const [prizes, setPrizes] = React.useState<string[]>([])
-
+	const [isSettings, setIsSettings] = React.useState(true)
+	const [prizes, setPrizes] = React.useState<TPrize[]>([])
 	handleWheelEvent(setIsSettings)
 
 	return isSettings
